@@ -17,8 +17,43 @@ model User {
   email     String   @unique
   name      String?
   avatarUrl String?  @map("avatar_url")
+
+  transactions Transaction[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
+}
+
+enum TransactionType {
+  income
+  expense
+}
+
+model Transaction {
+  id          String          @id @default(cuid())
+
+  userId      String          @map("user_id") @db.Uuid
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type        TransactionType
+
+  amount      Decimal         @db.Decimal(10, 2)
+
+  category    String
+
+  description String?
+
+  date        DateTime
+
+  isFixed     Boolean         @default(false) @map("is_fixed")
+
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([date])
+
+  @@map("transactions")
 }
