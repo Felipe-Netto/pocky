@@ -1,10 +1,11 @@
+import { SummaryCards } from "@/components/dashboard/summary-cards";
 import { getAuthenticatedUser } from "@/lib/auth";
 
 export default async function DashboardPage() {
   const user = await getAuthenticatedUser();
 
   return (
-    <div className="space-y-6">
+    <div className="flex w-full flex-1 flex-col gap-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">
           Olá, {user.name}
@@ -14,11 +15,8 @@ export default async function DashboardPage() {
         </p>
       </header>
 
-      <section className="rounded-2xl border border-dashed border-zinc-300 bg-white p-6 sm:p-8">
-        <h2 className="text-sm font-medium text-zinc-900">Gasto disponível</h2>
-        <p className="mt-2 text-sm text-zinc-600">
-          Em breve você verá aqui quanto pode gastar sem comprometer suas metas.
-        </p>
+      <section aria-label="Resumo financeiro do mês">
+        <SummaryCards />
       </section>
     </div>
   );

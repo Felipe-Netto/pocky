@@ -2,15 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
 type SignOutButtonProps = {
-  variant?: "default" | "sidebar";
+  layout?: "default" | "sidebar";
   icon?: ReactNode;
 };
 
 export function SignOutButton({
-  variant = "default",
+  layout = "default",
   icon,
 }: SignOutButtonProps) {
   const router = useRouter();
@@ -26,28 +27,19 @@ export function SignOutButton({
     router.refresh();
   }
 
-  if (variant === "sidebar") {
-    return (
-      <button
-        type="button"
-        onClick={handleSignOut}
-        disabled={isLoading}
-        className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 px-3 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {icon}
-        {isLoading ? "Saindo..." : "Sair"}
-      </button>
-    );
-  }
-
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      size="lg"
       onClick={handleSignOut}
       disabled={isLoading}
-      className="rounded-lg border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-900"
+      className={
+        layout === "sidebar" ? "h-10 w-full gap-2 px-4" : "h-10 px-4"
+      }
     >
+      {icon}
       {isLoading ? "Saindo..." : "Sair"}
-    </button>
+    </Button>
   );
 }

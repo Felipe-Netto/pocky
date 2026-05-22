@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { LogOut, X } from "lucide-react";
 import { SignOutButton } from "@/components/auth/sign-out-button";
 import { APP_NAV_ITEMS } from "@/components/layout/nav-items";
+import { Button } from "@/components/ui/button";
 
 export type SidebarUser = {
   name: string;
@@ -46,14 +47,16 @@ export function AppSidebar({ user, isOpen, onClose }: AppSidebarProps) {
           >
             Pocky
           </Link>
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon"
             onClick={onClose}
             aria-label="Fechar menu"
-            className="rounded-lg p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-900 lg:hidden"
+            className="text-zinc-500 lg:hidden"
           >
             <X className="h-5 w-5" />
-          </button>
+          </Button>
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">
@@ -69,11 +72,14 @@ export function AppSidebar({ user, isOpen, onClose }: AppSidebarProps) {
                 onClick={onClose}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   isActive
-                    ? "bg-zinc-900 text-white"
-                    : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+                    ? "bg-indigo-500/15 text-indigo-900"
+                    : "text-zinc-600 hover:bg-indigo-500/8 hover:text-indigo-800"
                 }`}
               >
-                <Icon className="h-4 w-4 shrink-0" aria-hidden />
+                <Icon
+                  className={`h-4 w-4 shrink-0 ${isActive ? "text-indigo-900" : ""}`}
+                  aria-hidden
+                />
                 {item.label}
               </Link>
             );
@@ -103,7 +109,7 @@ export function AppSidebar({ user, isOpen, onClose }: AppSidebarProps) {
             </div>
           </div>
           <SignOutButton
-            variant="sidebar"
+            layout="sidebar"
             icon={<LogOut className="h-4 w-4" aria-hidden />}
           />
         </div>

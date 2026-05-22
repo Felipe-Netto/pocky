@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
 
 export function GoogleSignInButton() {
@@ -23,15 +24,17 @@ export function GoogleSignInButton() {
   }
 
   return (
-    <button
+    <Button
       type="button"
+      variant="outline"
+      size="lg"
       onClick={handleSignIn}
       disabled={isLoading}
-      className="flex h-11 w-full items-center justify-center gap-3 rounded-lg border border-zinc-200 bg-white px-4 text-sm font-medium text-zinc-900 transition-colors hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 dark:hover:bg-zinc-900"
+      className="h-11 w-full gap-3"
     >
       <GoogleIcon />
       {isLoading ? "Redirecionando..." : "Entrar com Google"}
-    </button>
+    </Button>
   );
 }
 
