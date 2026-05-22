@@ -1,0 +1,85 @@
+---
+alwaysApply: true
+---
+
+
+Implemente o sistema de autenticação do projeto Pocky utilizando Supabase Auth com Google OAuth no Next.js App Router.
+
+Requisitos:
+
+- Utilizar @supabase/supabase-js
+- Utilizar @supabase/ssr
+- Utilizar TypeScript
+- Seguir a arquitetura já definida nas rules do projeto
+- Manter implementação simples e limpa
+- Utilizar Server Components quando possível
+
+Objetivo da implementação:
+
+- Login com Google
+- Persistência de sessão
+- Callback OAuth
+- Proteção de rotas autenticadas
+- Sincronização do usuário autenticado com a tabela users do banco via Prisma
+
+Estrutura esperada:
+
+src/
+  lib/
+    prisma.ts
+    supabase/
+      client.ts
+      server.ts
+      middleware.ts
+
+  app/
+    auth/
+      callback/
+        route.ts
+
+    login/
+      page.tsx
+
+    dashboard/
+      page.tsx
+
+Funcionalidades necessárias:
+
+1. Criar client browser do Supabase
+2. Criar client server do Supabase
+3. Implementar botão "Entrar com Google"
+4. Implementar callback OAuth
+5. Trocar o code da URL por sessão
+6. Criar sessão autenticada
+7. Criar middleware para proteger rotas privadas
+8. Redirecionar usuário não autenticado para /login
+9. Sincronizar usuário autenticado na tabela users
+10. Utilizar upsert do Prisma para criar/atualizar usuário
+11. Redirecionar usuário autenticado para /dashboard
+
+Tabela users:
+
+prisma model User {   id           String   @id   email        String   @unique   name         String?   avatarUrl    String?   createdAt    DateTime @default(now())   updatedAt    DateTime @updatedAt } 
+
+Dados que devem ser sincronizados do usuário Google:
+
+- id
+- email
+- full_name
+- avatar_url
+
+Variáveis de ambiente já existentes:
+
+env NEXT_PUBLIC_SUPABASE_URL= NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY= DATABASE_URL= DIRECT_URL= 
+
+Importante:
+
+- Não implementar autenticação manual
+- Não implementar bcrypt
+- Não implementar JWT manualmente
+- Não implementar login com email/senha
+- Utilizar exclusivamente Supabase Auth com Google OAuth
+- Seguir boas práticas do Next.js 15
+- Utilizar async/await
+- Evitar overengineering
+- Criar código limpo e tipado

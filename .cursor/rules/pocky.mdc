@@ -1,0 +1,194 @@
+---
+alwaysApply: true
+---
+
+# Regras do Projeto Pocky
+
+## Filosofia do Projeto
+
+- Manter o projeto simples e fácil de manter.
+- Priorizar legibilidade ao invés de abstrações desnecessárias.
+- Evitar overengineering.
+- Construir apenas o necessário para o MVP.
+- Priorizar velocidade de desenvolvimento e boa experiência do usuário.
+
+---
+
+# Stack do Projeto
+
+- Next.js App Router
+- TypeScript
+- TailwindCSS
+- shadcn/ui
+- Prisma
+- Supabase
+
+---
+
+# Regras Gerais
+
+- Utilizar TypeScript estritamente.
+- Nunca utilizar any.
+- Preferir Server Components sempre que possível.
+- Utilizar Client Components apenas quando necessário.
+- Evitar bibliotecas desnecessárias.
+- Evitar abstrações prematuras.
+- Preferir composição ao invés de herança.
+- Componentes devem ser pequenos e reutilizáveis.
+
+---
+
+# Estrutura de Pastas
+
+Utilizar a seguinte estrutura:
+
+app/
+  components/
+  features/
+  lib/
+  services/
+  hooks/
+  types/
+  pages/
+
+---
+
+# Componentes
+
+- Cada componente deve ter apenas uma responsabilidade.
+- Evitar arquivos maiores que 300 linhas.
+- Extrair componentes reutilizáveis sempre que fizer sentido.
+- Utilizar componentes do shadcn/ui sempre que possível.
+- Utilizar apenas ícones do Lucide.
+
+---
+
+# Estilização
+
+- Utilizar apenas TailwindCSS.
+- Evitar inline styles.
+- Priorizar utility classes.
+- Manter consistência de espaçamento.
+- Desenvolver pensando em responsividade desde o início.
+- Priorizar interface limpa, moderna e minimalista.
+
+---
+
+# Gerenciamento de Estado
+
+- Preferir estado local primeiro.
+- Não utilizar Redux ou Zustand sem necessidade real.
+- Utilizar React Query apenas se cache de servidor se tornar necessário.
+
+---
+
+# API e Dados
+
+- Utilizar Prisma para acesso ao banco.
+- Validar todos os inputs utilizando Zod.
+- Manter rotas simples.
+- Não colocar regra de negócio dentro de componentes.
+
+---
+
+# Banco de Dados
+
+- Utilizar nomes descritivos para tabelas e colunas.
+- Manter schemas simples.
+- Evitar relacionamentos desnecessários no início.
+- Adicionar índices apenas quando necessário.
+
+---
+
+# Princípios de UX
+
+- O produto deve parecer rápido.
+- Minimizar quantidade de cliques.
+- Otimizar para uso diário.
+- Priorizar experiência mobile.
+- Evitar dashboards poluídos.
+- A principal função do produto é ajudar o usuário a entender quanto pode gastar com segurança.
+
+---
+
+# Princípios do Produto Financeiro
+
+O Pocky NÃO é:
+- um sistema contábil
+- um ERP
+- um banco digital
+
+O Pocky É:
+- um planejador financeiro inteligente
+- uma ferramenta de consciência financeira
+- um guia diário de gastos
+
+A principal funcionalidade é:
+"Quanto o usuário pode gastar sem comprometer seus objetivos?"
+
+---
+
+# Escopo do MVP
+
+Implementar apenas:
+- autenticação
+- transações
+- metas
+- dashboard
+- cálculo de gastos disponíveis
+
+NÃO implementar:
+- Open Finance
+- IA
+- notificações
+- investimentos
+- múltiplos workspaces
+- funcionalidades sociais
+- analytics complexos
+- microserviços
+
+---
+
+# Estilo de Código
+
+- Utilizar async/await.
+- Preferir early returns.
+- Evitar condicionais aninhadas.
+- Utilizar nomes claros e descritivos.
+- Preferir funções puras.
+- Evitar magic numbers.
+- Criar constantes quando necessário.
+
+---
+
+# Performance
+
+- Otimizar apenas quando necessário.
+- Evitar renders desnecessários.
+- Utilizar paginação apenas se necessário.
+- Manter queries simples.
+
+---
+
+# Git
+
+- Utilizar mensagens de commit claras.
+- Preferir commits pequenos.
+- Uma feature por branch sempre que possível.
+
+---
+
+# Inspiração de UI
+
+A interface deve seguir referências como:
+- Linear
+- Notion
+- Monarch Money
+- Stripe Dashboard
+
+O visual deve ser:
+- minimalista
+- moderno
+- limpo
+- rápido
+- intuitivo
