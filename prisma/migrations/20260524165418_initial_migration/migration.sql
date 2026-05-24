@@ -1,6 +1,21 @@
 -- CreateEnum
 CREATE TYPE "TransactionType" AS ENUM ('income', 'expense');
 
+-- CreateEnum
+CREATE TYPE "PaymentMethod" AS ENUM ('pix', 'debit_card', 'credit_card', 'cash', 'bank_transfer');
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" UUID NOT NULL,
+    "email" TEXT NOT NULL,
+    "name" TEXT,
+    "avatar_url" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateTable
 CREATE TABLE "transactions" (
     "id" TEXT NOT NULL,
@@ -8,6 +23,7 @@ CREATE TABLE "transactions" (
     "type" "TransactionType" NOT NULL,
     "amount" DECIMAL(10,2) NOT NULL,
     "category" TEXT NOT NULL,
+    "payment_method" "PaymentMethod" NOT NULL,
     "description" TEXT,
     "date" TIMESTAMP(3) NOT NULL,
     "is_fixed" BOOLEAN NOT NULL DEFAULT false,
@@ -16,6 +32,9 @@ CREATE TABLE "transactions" (
 
     CONSTRAINT "transactions_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE INDEX "transactions_user_id_idx" ON "transactions"("user_id");

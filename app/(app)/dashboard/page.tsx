@@ -11,12 +11,12 @@ export default async function DashboardPage() {
           Olá, {user.name}
         </h1>
         <p className="mt-1 text-sm text-zinc-600">
-          Veja quanto você pode gastar com segurança hoje.
+          Planeje seus gastos sem abrir mão dos seus objetivos.
         </p>
       </header>
 
       <section aria-label="Resumo financeiro do mês">
-        <SummaryCards />
+        <SummaryCards userId={user.id} />
       </section>
     </div>
   );

@@ -1,5 +1,7 @@
 import { SummaryStatCard } from "@/components/dashboard/summary-stat-card";
 import { formatCurrency } from "@/lib/format-currency";
+import { getCurrentMonth } from "@/lib/month";
+import { getMonthlyFinancialSummary } from "@/services/transactions";
 import {
   ArrowDownLeft,
   ArrowUpRight,
@@ -7,49 +9,47 @@ import {
   Wallet,
 } from "lucide-react";
 
-// Placeholder até transações estarem implementadas
-const SUMMARY_DATA = {
-  income: 4000,
-  expenses: 1850,
-  balance: 2150,
-  availablePerDay: 72,
-  availableMonthly: 2150,
-  incomeTrend: "+12% vs mês anterior",
-  expensesTrend: "+8% vs mês anterior",
-  balanceTrend: "+21% vs mês anterior",
-} as const;
+type SummaryCardsProps = {
+  userId: string;
+  month?: string;
+};
 
-export function SummaryCards() {
+export async function SummaryCards({ userId, month }: SummaryCardsProps) {
+  const summary = await getMonthlyFinancialSummary(
+    userId,
+    month ?? getCurrentMonth(),
+  );
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       <SummaryStatCard
         title="Entradas"
-        value={formatCurrency(SUMMARY_DATA.income)}
+        value={formatCurrency(summary.income)}
         icon={ArrowDownLeft}
         accent="income"
-        footer={{ label: SUMMARY_DATA.incomeTrend, trend: "positive" }}
+        footer={summary.incomeTrend}
       />
       <SummaryStatCard
         title="Saídas"
-        value={formatCurrency(SUMMARY_DATA.expenses)}
+        value={formatCurrency(summary.expenses)}
         icon={ArrowUpRight}
         accent="expense"
-        footer={{ label: SUMMARY_DATA.expensesTrend, trend: "negative" }}
+        footer={summary.expensesTrend}
       />
       <SummaryStatCard
         title="Saldo do mês"
-        value={formatCurrency(SUMMARY_DATA.balance)}
+        value={formatCurrency(summary.balance)}
         icon={Scale}
         accent="balance"
-        footer={{ label: SUMMARY_DATA.balanceTrend, trend: "neutral" }}
+        footer={summary.balanceTrend}
       />
       <SummaryStatCard
         title="Disponível para gastar"
-        value={`${formatCurrency(SUMMARY_DATA.availablePerDay)}/dia`}
+        value={`${formatCurrency(summary.availablePerDay)}/dia`}
         icon={Wallet}
         accent="available"
         footer={{
-          label: `${formatCurrency(SUMMARY_DATA.availableMonthly)} no mês`,
+          label: `${formatCurrency(summary.availableMonthly)} no mês`,
         }}
       />
     </div>

@@ -31,26 +31,36 @@ enum TransactionType {
   expense
 }
 
+enum PaymentMethod {
+  pix
+  debit_card
+  credit_card
+  cash
+  bank_transfer
+}
+
 model Transaction {
-  id          String          @id @default(cuid())
+  id            String            @id @default(cuid())
 
-  userId      String          @map("user_id") @db.Uuid
-  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String            @map("user_id") @db.Uuid
+  user          User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  type        TransactionType
+  type          TransactionType
 
-  amount      Decimal         @db.Decimal(10, 2)
+  amount        Decimal           @db.Decimal(10, 2)
 
-  category    String
+  category      String
 
-  description String?
+  paymentMethod PaymentMethod     @map("payment_method")
 
-  date        DateTime
+  description   String?
 
-  isFixed     Boolean         @default(false) @map("is_fixed")
+  date          DateTime
 
-  createdAt   DateTime        @default(now()) @map("created_at")
-  updatedAt   DateTime        @updatedAt @map("updated_at")
+  isFixed       Boolean           @default(false) @map("is_fixed")
+
+  createdAt     DateTime          @default(now()) @map("created_at")
+  updatedAt     DateTime          @updatedAt @map("updated_at")
 
   @@index([userId])
   @@index([date])

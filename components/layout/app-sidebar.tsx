@@ -9,6 +9,7 @@ import { APP_NAV_ITEMS } from "@/components/layout/nav-items";
 import { Button } from "@/components/ui/button";
 
 export type SidebarUser = {
+  id: string;
   name: string;
   email: string;
   avatarUrl: string | null;
