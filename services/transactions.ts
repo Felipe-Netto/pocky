@@ -8,6 +8,10 @@ import {
   getPreviousMonth,
 } from "@/lib/month";
 import { prisma } from "@/lib/prisma";
+import {
+  buildExpenseMonthFilter,
+  buildTransactionMonthFilter,
+} from "@/lib/transaction-month";
 import type { CreateTransactionInput } from "@/lib/validations/transaction";
 import {
   TRANSACTIONS_PAGE_SIZE,
@@ -36,6 +40,7 @@ function serializeTransaction(
     paymentMethod: transaction.paymentMethod,
     description: transaction.description,
     date: transaction.date.toISOString(),
+    billingMonth: transaction.billingMonth,
     isFixed: transaction.isFixed,
   };
 }
@@ -51,11 +56,20 @@ async function sumByTypeForMonth(
     return 0;
   }
 
+  const monthFilter =
+    type === "expense"
+      ? buildExpenseMonthFilter(month)
+      : { date: range };
+
+  if (!monthFilter) {
+    return 0;
+  }
+
   const result = await prisma.transaction.aggregate({
     where: {
       userId,
       type,
-      date: range,
+      ...monthFilter,
     },
     _sum: {
       amount: true,
@@ -108,31 +122,35 @@ export async function listTransactions(
   const pageSize = options.pageSize ?? TRANSACTIONS_PAGE_SIZE;
   const skip = (page - 1) * pageSize;
 
-  const where: Prisma.TransactionWhereInput = { userId };
+  const conditions: Prisma.TransactionWhereInput[] = [{ userId }];
 
   if (options.type) {
-    where.type = options.type;
+    conditions.push({ type: options.type });
   }
 
   if (options.category) {
-    where.category = options.category;
+    conditions.push({ category: options.category });
   }
 
   if (options.search?.trim()) {
     const search = options.search.trim();
-    where.OR = [
-      { description: { contains: search, mode: "insensitive" } },
-      { category: { contains: search, mode: "insensitive" } },
-    ];
+    conditions.push({
+      OR: [
+        { description: { contains: search, mode: "insensitive" } },
+        { category: { contains: search, mode: "insensitive" } },
+      ],
+    });
   }
 
   if (options.month) {
-    const range = buildMonthRange(options.month);
+    const monthFilter = buildTransactionMonthFilter(options.month);
 
-    if (range) {
-      where.date = range;
+    if (monthFilter) {
+      conditions.push(monthFilter);
     }
   }
+
+  const where: Prisma.TransactionWhereInput = { AND: conditions };
 
   const [rows, total] = await Promise.all([
     prisma.transaction.findMany({
@@ -166,6 +184,10 @@ export async function createTransaction(
       paymentMethod: input.paymentMethod,
       description: input.description ?? null,
       date: input.date,
+      billingMonth:
+        input.type === "expense" && input.paymentMethod === "credit_card"
+          ? input.billingMonth ?? null
+          : null,
       isFixed: input.isFixed,
     },
   });

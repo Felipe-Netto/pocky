@@ -36,6 +36,7 @@ export type TransactionListItem = {
   paymentMethod: PaymentMethod;
   description: string | null;
   date: string;
+  billingMonth: string | null;
   isFixed: boolean;
 };
 

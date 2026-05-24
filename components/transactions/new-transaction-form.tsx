@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, CreditCard, Wallet } from "lucide-react";
+import { Calendar, CreditCard, Receipt, Wallet } from "lucide-react";
 import { useState, useTransition, type ReactNode } from "react";
 
 import { createTransactionAction } from "@/actions/transactions";
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { formatMonthLabel, getCurrentMonth, getNextMonth } from "@/lib/month";
 import { parseCurrencyInput } from "@/lib/parse-currency-input";
 import { cn } from "@/lib/utils";
 import {
@@ -68,6 +69,7 @@ export function NewTransactionForm({ onSuccess }: NewTransactionFormProps) {
   const [date, setDate] = useState(getTodayDateInputValue);
   const [category, setCategory] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | "">("");
+  const [billingMonth, setBillingMonth] = useState(getCurrentMonth);
   const [description, setDescription] = useState("");
   const [isFixed, setIsFixed] = useState(false);
   const [notes, setNotes] = useState("");
@@ -75,10 +77,23 @@ export function NewTransactionForm({ onSuccess }: NewTransactionFormProps) {
   const [isPending, startTransition] = useTransition();
 
   const categories = type === "expense" ? EXPENSE_CATEGORIES : INCOME_CATEGORIES;
+  const showBillingMonthField =
+    type === "expense" && paymentMethod === "credit_card";
+  const currentMonth = getCurrentMonth();
+  const nextMonth = getNextMonth();
 
   function handleTypeChange(nextType: TransactionType) {
     setType(nextType);
     setCategory("");
+    setBillingMonth(getCurrentMonth());
+  }
+
+  function handlePaymentMethodChange(value: PaymentMethod) {
+    setPaymentMethod(value);
+
+    if (type === "expense" && value === "credit_card") {
+      setBillingMonth(getCurrentMonth());
+    }
   }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -100,6 +115,7 @@ export function NewTransactionForm({ onSuccess }: NewTransactionFormProps) {
         paymentMethod,
         description: buildDescription(description, notes),
         date,
+        billingMonth: showBillingMonthField ? billingMonth : undefined,
         isFixed,
       });
 
@@ -166,7 +182,9 @@ export function NewTransactionForm({ onSuccess }: NewTransactionFormProps) {
         <FormField label="Pagamento">
           <Select
             value={paymentMethod}
-            onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}
+            onValueChange={(value) =>
+              handlePaymentMethodChange(value as PaymentMethod)
+            }
             required
           >
             <SelectTrigger className={inputClassName}>
@@ -185,6 +203,30 @@ export function NewTransactionForm({ onSuccess }: NewTransactionFormProps) {
           </Select>
         </FormField>
       </div>
+
+      {showBillingMonthField ? (
+        <FormField label="Mês da fatura">
+          <Select value={billingMonth} onValueChange={setBillingMonth} required>
+            <SelectTrigger className={inputClassName}>
+              <div className="flex items-center gap-2">
+                <Receipt className="size-4 text-zinc-400" />
+                <SelectValue placeholder="Selecione o mês da fatura" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={currentMonth}>
+                Este mês ({formatMonthLabel(currentMonth)})
+              </SelectItem>
+              <SelectItem value={nextMonth}>
+                Próximo mês ({formatMonthLabel(nextMonth)})
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          <p className="text-sm text-zinc-500">
+            Define em qual mês essa despesa será contabilizada no seu orçamento.
+          </p>
+        </FormField>
+      ) : null}
 
       <FormField label="Descrição">
         <Input

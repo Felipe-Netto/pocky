@@ -42,6 +42,35 @@ export function getPreviousMonth(month: string): string {
   return `${year}-${monthValue}`;
 }
 
+export function getNextMonth(month: string = getCurrentMonth()): string {
+  const range = buildMonthRange(month);
+
+  if (!range) {
+    return month;
+  }
+
+  const date = new Date(range.gte);
+  date.setMonth(date.getMonth() + 1);
+
+  const year = date.getFullYear();
+  const monthValue = String(date.getMonth() + 1).padStart(2, "0");
+
+  return `${year}-${monthValue}`;
+}
+
+export function formatMonthLabel(month: string): string {
+  const range = buildMonthRange(month);
+
+  if (!range) {
+    return month;
+  }
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    month: "long",
+    year: "numeric",
+  }).format(range.gte);
+}
+
 export function getDaysInMonth(month: string): number {
   const range = buildMonthRange(month);
 

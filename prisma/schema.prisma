@@ -57,6 +57,8 @@ model Transaction {
 
   date          DateTime
 
+  billingMonth  String?           @map("billing_month")
+
   isFixed       Boolean           @default(false) @map("is_fixed")
 
   createdAt     DateTime          @default(now()) @map("created_at")
